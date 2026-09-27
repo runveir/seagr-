@@ -36,4 +36,4 @@ Identifies a person via webcam, reads their emotional state, and greets them wit
 - `src/seagr_ros2_msgs/` — `UserDetection` and `GreetingCmd` message definitions
 - `src/urdf/`, `src/launch/` — robot model and launch config
 
-Demo video: `demo_video.mp4`
+Demo video: https://github.com/user-attachments/assets/5ddfa66c-0b35-42e3-bd8a-fffc2ee83685

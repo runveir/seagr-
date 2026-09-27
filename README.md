@@ -9,11 +9,11 @@ Identifies a person via webcam, reads their emotional state, and greets them wit
 
 **Pipeline:** `perception_node` (identity + emotion) → `decision_node` (emotion → amplitude/hold/nod) → `action_node` (joint control in Gazebo)
 
-Identification: face_recognition (dlib ResNet face embeddings) matched against pre-enrolled encodings, via OpenCV webcam capture
-Emotion recognition: geometric heuristic over facial landmarks (mouth aspect ratio, eyebrow displacement, normalized by face width) — no trained classifier, real-time on CPU
-Middleware: ROS2, custom .msg interfaces (UserDetection, GreetingCmd) for perception → decision → action
-Simulation/Actuation: Gazebo, URDF robot model, JointPositionController plugins per joint, bridged via ros_gz_bridge
-Language: Python
+**Identification:** face_recognition (dlib ResNet face embeddings) matched against pre-enrolled encodings, via OpenCV webcam capture
+**Emotion recognition:** geometric heuristic over facial landmarks (mouth aspect ratio, eyebrow displacement, normalized by face width) — no trained classifier, real-time on CPU
+**Middleware:** ROS2, custom .msg interfaces (UserDetection, GreetingCmd) for perception → decision → action
+**Simulation/Actuation:** Gazebo, URDF robot model, JointPositionController plugins per joint, bridged via ros_gz_bridge
+**Language**: Python
 
 | Emotion | Amplitude | Hold |
 |---|---|---|

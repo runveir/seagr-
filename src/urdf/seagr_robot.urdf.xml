@@ -1,0 +1,482 @@
+<?xml version="1.0"?>
+<robot name="seagr_robot">
+
+  <!-- Fixes the robot in place — it's a stationary upper-body greeter
+       with no legs, so without this it just falls under gravity as
+       soon as physics starts. -->
+  <link name="world"/>
+
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ========== TORSO / BASE ========== -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.05" ixy="0" ixz="0" iyy="0.05" iyz="0" izz="0.05"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.18 0.12 0.28"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.18 0.12 0.28"/>
+      </geometry>
+      <material name="torso_mat">
+        <color rgba="0.95 0.93 0.88 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- ========== HEAD (CHARACTER) ========== -->
+  <link name="head_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.4"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.085"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.085"/>
+      </geometry>
+      <material name="head_mat">
+        <color rgba="0.9 0.75 0.65 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Left eye -->
+  <link name="left_eye_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="eye_mat">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="head_to_left_eye" type="fixed">
+    <origin xyz="-0.028 0.025 0.035"/>
+    <parent link="head_link"/>
+    <child link="left_eye_link"/>
+  </joint>
+
+  <!-- Right eye -->
+  <link name="right_eye_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="eye_mat">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="head_to_right_eye" type="fixed">
+    <origin xyz="0.028 0.025 0.035"/>
+    <parent link="head_link"/>
+    <child link="right_eye_link"/>
+  </joint>
+
+  <!-- Mouth smile curve -->
+  <link name="mouth_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.03" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.015" length="0.045"/>
+      </geometry>
+      <material name="eye_mat">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="head_to_mouth" type="fixed">
+    <origin xyz="0 0 0"/>
+    <parent link="head_link"/>
+    <child link="mouth_link"/>
+  </joint>
+
+  <!-- Head to torso -->
+  <joint name="base_to_head" type="revolute">
+    <origin xyz="0 0 0.37" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="head_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.4" upper="0.15" effort="3" velocity="1.0"/>
+    <dynamics damping="0.1" friction="0.05"/>
+  </joint>
+
+  <!-- ========== RIGHT ARM ========== -->
+  <link name="right_shoulder_link">
+    <inertial>
+      <origin xyz="0.06 0 0" rpy="0 0 0"/>
+      <mass value="0.25"/>
+      <inertia ixx="0.0008" ixy="0" ixz="0" iyy="0.0008" iyz="0" izz="0.0008"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.06 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.028" length="0.12"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.06 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.028" length="0.12"/>
+      </geometry>
+      <material name="arm_mat">
+        <color rgba="0.9 0.75 0.65 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Virtual pivot link giving the shoulder a second (adduction) axis,
+       so the arm can swing toward the body's center line, not just
+       pitch forward/up. Namaste needs both. -->
+  <link name="right_shoulder_adduct_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+  </link>
+
+  <joint name="right_shoulder_adduct" type="revolute">
+    <origin xyz="0.11 -0.09 0.24" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="right_shoulder_adduct_link"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.2" upper="1.4" effort="8" velocity="1.0"/>
+    <dynamics damping="0.15" friction="0.1"/>
+  </joint>
+
+  <joint name="base_to_right_shoulder" type="revolute">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_shoulder_adduct_link"/>
+    <child link="right_shoulder_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="8" velocity="1.0"/>
+    <dynamics damping="0.15" friction="0.1"/>
+  </joint>
+
+  <link name="right_forearm_link">
+    <inertial>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <mass value="0.18"/>
+      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.024" length="0.10"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.024" length="0.10"/>
+      </geometry>
+      <material name="arm_mat">
+        <color rgba="0.9 0.75 0.65 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="right_shoulder_to_elbow" type="revolute">
+    <origin xyz="0.12 0 0" rpy="0 0 0"/>
+    <parent link="right_shoulder_link"/>
+    <child link="right_forearm_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.2" upper="2.2" effort="6" velocity="1.0"/>
+    <dynamics damping="0.15" friction="0.1"/>
+  </joint>
+
+  <link name="right_hand_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.12"/>
+      <inertia ixx="0.00008" ixy="0" ixz="0" iyy="0.00008" iyz="0" izz="0.00008"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.038 0.028 0.048"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.038 0.028 0.048"/>
+      </geometry>
+      <material name="hand_mat">
+        <color rgba="0.92 0.78 0.68 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="right_forearm_to_hand" type="fixed">
+    <origin xyz="0.10 0 0" rpy="0 0 0"/>
+    <parent link="right_forearm_link"/>
+    <child link="right_hand_link"/>
+  </joint>
+
+  <!-- ========== LEFT ARM (symmetric) ========== -->
+  <link name="left_shoulder_link">
+    <inertial>
+      <origin xyz="0.06 0 0" rpy="0 0 0"/>
+      <mass value="0.25"/>
+      <inertia ixx="0.0008" ixy="0" ixz="0" iyy="0.0008" iyz="0" izz="0.0008"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.06 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.028" length="0.12"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.06 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.028" length="0.12"/>
+      </geometry>
+      <material name="arm_mat">
+        <color rgba="0.9 0.75 0.65 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="left_shoulder_adduct_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_shoulder_adduct" type="revolute">
+    <origin xyz="0.11 0.09 0.24" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="left_shoulder_adduct_link"/>
+    <axis xyz="-1 0 0"/>
+    <limit lower="-0.2" upper="1.4" effort="8" velocity="1.0"/>
+    <dynamics damping="0.15" friction="0.1"/>
+  </joint>
+
+  <joint name="base_to_left_shoulder" type="revolute">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_shoulder_adduct_link"/>
+    <child link="left_shoulder_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="8" velocity="1.0"/>
+    <dynamics damping="0.15" friction="0.1"/>
+  </joint>
+
+  <link name="left_forearm_link">
+    <inertial>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <mass value="0.18"/>
+      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.024" length="0.10"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder radius="0.024" length="0.10"/>
+      </geometry>
+      <material name="arm_mat">
+        <color rgba="0.9 0.75 0.65 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="left_shoulder_to_elbow" type="revolute">
+    <origin xyz="0.12 0 0" rpy="0 0 0"/>
+    <parent link="left_shoulder_link"/>
+    <child link="left_forearm_link"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.2" upper="2.2" effort="6" velocity="1.0"/>
+    <dynamics damping="0.15" friction="0.1"/>
+  </joint>
+
+  <link name="left_hand_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.12"/>
+      <inertia ixx="0.00008" ixy="0" ixz="0" iyy="0.00008" iyz="0" izz="0.00008"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.038 0.028 0.048"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.038 0.028 0.048"/>
+      </geometry>
+      <material name="hand_mat">
+        <color rgba="0.92 0.78 0.68 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="left_forearm_to_hand" type="fixed">
+    <origin xyz="0.10 0 0" rpy="0 0 0"/>
+    <parent link="left_forearm_link"/>
+    <child link="left_hand_link"/>
+  </joint>
+
+  <!-- ========== MATERIALS ========== -->
+  <material name="torso_mat">
+    <color rgba="0.95 0.93 0.88 1.0"/>
+  </material>
+  <material name="head_mat">
+    <color rgba="0.9 0.75 0.65 1.0"/>
+  </material>
+  <material name="arm_mat">
+    <color rgba="0.9 0.75 0.65 1.0"/>
+  </material>
+  <material name="hand_mat">
+    <color rgba="0.92 0.78 0.68 1.0"/>
+  </material>
+  <material name="eye_mat">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+
+  <!-- ========== GAZEBO JOINT CONTROLLERS ==========
+       One JointPositionController per revolute joint. Each listens on a
+       model-scoped gz-transport topic for a gz.msgs.Double position
+       command. These are Gazebo Transport topics, not ROS2 topics — a
+       ros_gz_bridge parameter_bridge is still needed to forward ROS2
+       publishes from action_node.py onto these. -->
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>base_to_right_shoulder</joint_name>
+      <topic>/model/seagr_robot/joint/base_to_right_shoulder/cmd_pos</topic>
+      <p_gain>10</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.5</d_gain>
+      <cmd_max>8</cmd_max>
+      <cmd_min>-8</cmd_min>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>right_shoulder_to_elbow</joint_name>
+      <topic>/model/seagr_robot/joint/right_shoulder_to_elbow/cmd_pos</topic>
+      <p_gain>10</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.5</d_gain>
+      <cmd_max>6</cmd_max>
+      <cmd_min>-6</cmd_min>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>base_to_left_shoulder</joint_name>
+      <topic>/model/seagr_robot/joint/base_to_left_shoulder/cmd_pos</topic>
+      <p_gain>10</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.5</d_gain>
+      <cmd_max>8</cmd_max>
+      <cmd_min>-8</cmd_min>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>left_shoulder_to_elbow</joint_name>
+      <topic>/model/seagr_robot/joint/left_shoulder_to_elbow/cmd_pos</topic>
+      <p_gain>10</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.5</d_gain>
+      <cmd_max>6</cmd_max>
+      <cmd_min>-6</cmd_min>
+    </plugin>
+  </gazebo>
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>right_shoulder_adduct</joint_name>
+      <topic>/model/seagr_robot/joint/right_shoulder_adduct/cmd_pos</topic>
+      <p_gain>10</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.5</d_gain>
+      <cmd_max>8</cmd_max>
+      <cmd_min>-8</cmd_min>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>left_shoulder_adduct</joint_name>
+      <topic>/model/seagr_robot/joint/left_shoulder_adduct/cmd_pos</topic>
+      <p_gain>10</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.5</d_gain>
+      <cmd_max>8</cmd_max>
+      <cmd_min>-8</cmd_min>
+    </plugin>
+  </gazebo>
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system"
+            name="gz::sim::systems::JointPositionController">
+      <joint_name>base_to_head</joint_name>
+      <topic>/model/seagr_robot/joint/base_to_head/cmd_pos</topic>
+      <p_gain>8</p_gain>
+      <i_gain>0</i_gain>
+      <d_gain>0.4</d_gain>
+      <cmd_max>3</cmd_max>
+      <cmd_min>-3</cmd_min>
+    </plugin>
+  </gazebo>
+
+</robot>

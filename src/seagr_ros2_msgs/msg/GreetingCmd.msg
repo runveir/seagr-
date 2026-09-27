@@ -1,0 +1,10 @@
+float32 right_shoulder_target
+float32 right_elbow_target
+float32 left_shoulder_target
+float32 left_elbow_target
+float32 right_shoulder_adduct_target
+float32 left_shoulder_adduct_target
+float32 head_nod_target
+float32 hold_seconds
+string greeting_type
+float32 amplitude

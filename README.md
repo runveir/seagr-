@@ -39,3 +39,6 @@ Identifies a person via webcam, reads their emotional state, and greets them wit
 Demo video:
 
 https://github.com/user-attachments/assets/5ddfa66c-0b35-42e3-bd8a-fffc2ee83685
+
+what this video is showing that after identifying my face it locks onto a greeting mode based on my nationality using a pre-fed database and then based on my facial expression the intensity/modulation of the greet is decided. 
+Apologies for the very wrong Namaste :(
